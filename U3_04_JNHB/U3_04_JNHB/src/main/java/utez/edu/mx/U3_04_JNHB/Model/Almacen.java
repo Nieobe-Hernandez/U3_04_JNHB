@@ -19,17 +19,21 @@ public class Almacen {
     private Long id;
 
     private String claveAlmacen;
-
     private LocalDate fechaRegistro;
+    private double precioVenta;
+    private double precioRenta;
 
-    private Double precioVenta;
+    @Enumerated(EnumType.STRING)
+    private Tamano tamano; // G, M, P
 
-    private Double precioRenta;
-
-    private String tamaño;
+    private boolean vendido;
+    private boolean rentado;
 
     @ManyToOne
     @JoinColumn(name = "cede_id")
     private Cede cede;
 
+    public enum Tamano {
+        G, M, P
+    }
 }

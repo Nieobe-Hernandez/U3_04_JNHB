@@ -2,6 +2,7 @@ package utez.edu.mx.U3_04_JNHB.Controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import utez.edu.mx.U3_04_JNHB.Model.Cliente;
@@ -14,31 +15,34 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ClienteController {
 
-    private final ClienteService clienteService;
+    private final ClienteService service;
 
     @GetMapping
-    public List<Cliente> findAll(){
-        return clienteService.findAll();
+    public List<Cliente> getAll() {
+        return service.findAll();
     }
 
     @GetMapping("/{id}")
-    public Cliente findById(@PathVariable Long id){
-        return clienteService.findById(id);
+    public ResponseEntity<Cliente> getById(@PathVariable Long id) {
+        return service.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Cliente save(@RequestBody Cliente cliente){
-        return clienteService.save(cliente);
+    public ResponseEntity<Cliente> create(@RequestBody Cliente cliente) {
+        return ResponseEntity.ok(service.save(cliente));
     }
 
     @PutMapping("/{id}")
-    public Cliente update(@PathVariable Long id, @RequestBody Cliente cliente){
-        return clienteService.update(id, cliente);
+    public ResponseEntity<Cliente> update(@PathVariable Long id, @RequestBody Cliente cliente) {
+        return ResponseEntity.ok(service.update(id, cliente));
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id){
-        clienteService.delete(id);
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        service.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }
 
